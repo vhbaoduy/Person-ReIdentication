@@ -1,0 +1,6 @@
+.vscode
+*/__pycache__
+*/*/__pycache__
+*/.ipynb_checkpoints
+market1501
+weights_resnet50_market_imageNet

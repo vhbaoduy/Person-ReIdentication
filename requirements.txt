@@ -1,0 +1,12 @@
+scipy
+pytorch-ignite
+PyYAML
+albumentations
+h5py
+tensorboard
+opencv-python
+numpy
+pandas
+torch
+Pillow
+apex
