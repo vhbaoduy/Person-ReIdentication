@@ -1,5 +1,5 @@
 scipy
-pytorch-ignite
+pytorch-ignite==0.1.2
 PyYAML
 albumentations
 h5py

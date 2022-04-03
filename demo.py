@@ -17,6 +17,7 @@ def visualizer(test_img, camid, top_k=10, img_size=[128, 128]):
     figure = np.asarray(query_img.resize((img_size[1], img_size[0])))
     for k in range(top_k):
         name = str(indices[0][k]).zfill(6)
+        print('Top %d: %s'  % (k +1, img_path[indices[0][k]]))
         img = np.asarray(Image.open(img_path[indices[0][k]]).resize(
             (img_size[1], img_size[0])))
         figure = np.hstack((figure, img))
@@ -64,26 +65,22 @@ if __name__ == "__main__":
 
     #test all image from query dir
 
-    for test_img in os.listdir(config.query_dir):
-        if test_img.split('.')[-1] == 'db':
-            continue
-        logger.info('Finding ID {} ...'.format(test_img))
+    path_to_img = args.query_image
+    test_img = path_to_img.split("/")[-1]
+    logger.info('Finding ID {} ...'.format(test_img))
 
-        gallery_feats = torch.load(os.path.join(config.log_dir, config.gfeats))
-        img_path = np.load(os.path.join(config.log_dir, config.img_path))
+    gallery_feats = torch.load(os.path.join(config.log_dir, config.gfeats))
+    img_path = np.load(os.path.join(config.log_dir, config.img_path))
 
-        print('[gallery_feats.shape, len(img_path)]: ', gallery_feats.shape, len(img_path))
+    query_img = Image.open(path_to_img)
+    input = torch.unsqueeze(transform(query_img), 0)
+    input = input.to(config.device)
+    with torch.no_grad():
+        query_feat = model(input)
 
-        query_img = Image.open(os.path.join(config.query_dir, test_img))
-        input = torch.unsqueeze(transform(query_img), 0)
-        input = input.to(config.device)
-        with torch.no_grad():
-            query_feat = model(input)
-
-        dist_mat = cosine_similarity(query_feat, gallery_feats)
-        indices = np.argsort(dist_mat, axis=1)
-        visualizer(test_img, camid='mixed', top_k=10,
-                   img_size=config.image_size)
-
+    dist_mat = cosine_similarity(query_feat, gallery_feats)
+    indices = np.argsort(dist_mat, axis=1)
+    visualizer(test_img, camid='mixed', top_k=10,
+                img_size=config.image_size)
         
         

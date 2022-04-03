@@ -51,7 +51,7 @@ settings:
   test_weight: "./weights_resnet50_market_out/resnet50_inb_a_model_10.pth"
 
   flip_feats: "off" # on, off
-  log_dir: "loggers/runs/resnet50_market"
+  log_dir: "loggers/runs/"
   query_dir: "market1501/query"
   dist_mat: "dist_mat.npy"
   pids: "pids.npy"
